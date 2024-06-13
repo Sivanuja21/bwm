@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BWM Input</title>
+    <style>
+        /* Global styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        /* Form styles */
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        input[type="number"]:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        
+        /* Container styles */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .container > div {
+            flex: 1;
+            margin: 20px;
+        }
+        
+        /* Button styles */
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+
+        /* Description table */
+        .description {
+            margin: 20px auto;
+            max-width: 800px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .description th, .description td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .description th {
+            background-color: #f0f0f0;
+        }
+        .description td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Best Worst Method Input</h1>
+    <form method="post">
+        <label for="num_factors">Number of Factors:</label>
+        <input type="number" id="num_factors" name="num_factors" required><br><br>
+        
+        <label for="best_factor">Best Factor:</label>
+        <input type="number" id="best_factor" name="best_factor" required><br><br>
+        
+        <label for="worst_factor">Worst Factor:</label>
+        <input type="number" id="worst_factor" name="worst_factor" required><br><br>
+        
+        <div class="container">
+            <div>
+                <h2>Best to Others (BO) Scores</h2>
+                <table id="bo_table">
+                    <!-- Dynamic input fields will be added here by JavaScript -->
+                </table>
+            </div>
+            <div>
+                <h2>Others to Worst (OW) Scores</h2>
+                <table id="ow_table">
+                    <!-- Dynamic input fields will be added here by JavaScript -->
+                </table>
+            </div>
+        </div>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>9 - Point Scale Score of BWM</h2>
+    <table class="description">
+        <thead>
+            <tr>
+                <th>Score</th>
+                <th>Meaning</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Equal importance</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Somewhat between Equal and Moderate</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Moderately more important than</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Somewhat between Moderate and Strong</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Strongly more important than</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Somewhat between Strong and Very strong</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Very strongly important than</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Somewhat between Very strong and Absolute</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Absolutely more important than</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function createTables() {
+            const num_factors = parseInt(document.getElementById('num_factors').value);
+            const best_factor = parseInt(document.getElementById('best_factor').value);
+            const worst_factor = parseInt(document.getElementById('worst_factor').value);
+            const bo_table = document.getElementById('bo_table');
+            const ow_table = document.getElementById('ow_table');
+
+            bo_table.innerHTML = '';
+            ow_table.innerHTML = '';
+
+            // Create BO table header
+            let bo_header = bo_table.insertRow();
+            bo_header.insertCell().outerHTML = "<th>Best Factor</th>";
+            bo_header.insertCell().outerHTML = "<th>Other Factors</th>";
+            bo_header.insertCell().outerHTML = "<th>BO Score</th>";
+
+            // Create OW table header
+            let ow_header = ow_table.insertRow();
+            ow_header.insertCell().outerHTML = "<th>Other Factors</th>";
+            ow_header.insertCell().outerHTML = "<th>Worst Factor</th>";
+            ow_header.insertCell().outerHTML = "<th>OW Score</th>";
+
+            for (let i = 1; i <= num_factors; i++) {
+                // Create BO table rows
+                let bo_row = bo_table.insertRow();
+                bo_row.insertCell().innerText = best_factor;
+                bo_row.insertCell().innerText = i;
+                let bo_cell = bo_row.insertCell();
+                bo_cell.innerHTML = `<input type="number" id="bo_score_${i}" name="bo_score_${i}" required>`;
+                if (best_factor === i) {
+                    bo_cell.firstChild.value = 1;
+                    bo_cell.firstChild.disabled = true;
+                }
+
+                // Create OW table rows
+                let ow_row = ow_table.insertRow();
+                ow_row.insertCell().innerText = i;
+                ow_row.insertCell().innerText = worst_factor;
+                let ow_cell = ow_row.insertCell();
+                ow_cell.innerHTML = `<input type="number" id="ow_score_${i}" name="ow_score_${i}" required>`;
+                if (worst_factor === i) {
+                    ow_cell.firstChild.value = 1;
+                    ow_cell.firstChild.disabled = true;
+                }
+            }
+        }
+
+        document.getElementById('num_factors').addEventListener('change', createTables);
+        document.getElementById('best_factor').addEventListener('change', createTables);
+        document.getElementById('worst_factor').addEventListener('change', createTables);
+    </script>
+</body>
+</html>

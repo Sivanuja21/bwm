@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BWM Results</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BWM Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Factor</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factor, weight in weights.items() %}
+            <tr>
+                <td>{{ factor }}</td>
+                <td>{{ weight }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
